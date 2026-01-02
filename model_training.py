@@ -1,84 +1,210 @@
 # model_training.py
 
+from pathlib import Path
 import pandas as pd
 import numpy as np
-from sklearn.model_selection import train_test_split, GridSearchCV
-from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
-from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_squared_error, r2_score
+import json
 import joblib
+import sys
 
-def prepare_data(df: pd.DataFrame, target: str = "prix") -> tuple:
-    """
-    Séparer les features de la target et encoder les variables catégorielles.
-    Retourne X_train, X_test, y_train, y_test
-    """
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.linear_model import LinearRegression, Lasso
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+
+# ===========================
+# PATHS
+# ===========================
+BASE_DIR = Path(__file__).resolve().parent
+DATA_PATH = BASE_DIR / "data" / "autoscrap_FIN_clean.csv"
+MODELS_DIR = BASE_DIR / "models"
+MODELS_DIR.mkdir(exist_ok=True)
+
+# ===========================
+# LOG
+# ===========================
+def log(title):
+    print("\n" + "=" * 60)
+    print(title)
+    print("=" * 60)
+
+# ===========================
+# DATA PREPARATION
+# ===========================
+def prepare_data(df, target="prix", test_size=0.2):
     df = df.copy()
-    
-    # Variables numériques
-    numeric_features = ['kilometrage', 'puissance_cv', 'age_voiture']
-    
-    # Variables catégorielles à encoder
-    categorical_features = ['carburant', 'boite_vitesse', 'marque', 'modele']
-    
-    # One-hot encoding
-    df_encoded = pd.get_dummies(df[numeric_features + categorical_features], drop_first=True)
-    
-    X = df_encoded
-    y = df[target]
-    
-    # Split train/test
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=42
+    df.columns = df.columns.str.strip().str.lower()
+    target = target.lower()
+
+    if target not in df.columns:
+        raise ValueError(f"❌ Target manquante : {target}")
+
+    # Colonnes utilisées
+    num_cols = ["kilometrage", "puissance_cv", "age_voiture"]
+    cat_cols = ["carburant", "boite_vitesse", "marque", "modele"]
+
+    num_cols = [c for c in num_cols if c in df.columns]
+    cat_cols = [c for c in cat_cols if c in df.columns]
+
+    # Encodage EXACT utilisé ensuite dans l'app
+    X = pd.get_dummies(
+        df[num_cols + cat_cols],
+        columns=cat_cols,
+        drop_first=True
     )
-    
-    return X_train, X_test, y_train, y_test
 
-def train_models(X_train, y_train):
-    """
-    Entraîner plusieurs modèles et retourner un dictionnaire avec tous les modèles entraînés.
-    """
-    models = {
-        'LinearRegression': LinearRegression(),
-        'RandomForest': RandomForestRegressor(n_estimators=200, random_state=42),
-        'GradientBoosting': GradientBoostingRegressor(n_estimators=200, learning_rate=0.1, random_state=42)
+    y = df[target].astype(float)
+
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=test_size, random_state=42
+    )
+
+    return (
+        X_train,
+        X_test,
+        y_train,
+        y_test,
+        X.columns.tolist(),
+        num_cols,
+        cat_cols
+    )
+
+# ===========================
+# METRICS
+# ===========================
+def evaluate(y_true, y_pred):
+    return {
+        "mae": mean_absolute_error(y_true, y_pred),
+        "rmse": mean_squared_error(y_true, y_pred) ** 0.5,
+        "r2": r2_score(y_true, y_pred),
     }
-    
-    trained_models = {}
-    for name, model in models.items():
-        model.fit(X_train, y_train)
-        trained_models[name] = model
-    
-    return trained_models
 
-def evaluate_models(models: dict, X_test, y_test):
-    """
-    Évaluer les modèles sur le test set et retourner un DataFrame avec les scores RMSE et R2.
-    """
+# ===========================
+# MAIN
+# ===========================
+def main():
+
+    if not DATA_PATH.exists():
+        print(f"❌ CSV introuvable : {DATA_PATH}")
+        sys.exit(1)
+
+    log("📥 Chargement des données")
+    df = pd.read_csv(DATA_PATH, sep=";")
+
+    log("🧱 Préparation des données")
+    (
+        X_train,
+        X_test,
+        y_train,
+        y_test,
+        features,
+        num_cols,
+        cat_cols
+    ) = prepare_data(df)
+
+    models = {
+        "linear_regression": LinearRegression(),
+        "lasso": Lasso(alpha=0.1, random_state=42),
+        "decision_tree": DecisionTreeRegressor(max_depth=10, random_state=42),
+        "random_forest": RandomForestRegressor(
+            n_estimators=200,
+            min_samples_leaf=2,
+            random_state=42
+        ),
+        "gradient_boosting": GradientBoostingRegressor(random_state=42),
+    }
+
+    gbr_grid = {
+        "n_estimators": [100, 200],
+        "learning_rate": [0.05, 0.1],
+        "max_depth": [2, 3],
+    }
+
     results = []
-    for name, model in models.items():
-        y_pred = model.predict(X_test)
-        rmse = np.sqrt(mean_squared_error(y_test, y_pred))
-        r2 = r2_score(y_test, y_pred)
-        results.append({'Model': name, 'RMSE': rmse, 'R2': r2})
-    
-    return pd.DataFrame(results).sort_values(by='RMSE')
+    all_params = {}
+    best_model = None
+    best_name = None
+    best_score = float("inf")
+    best_result = None
 
-def save_best_model(models: dict, X_test, y_test, path: str = "best_model.pkl"):
-    """
-    Identifier le meilleur modèle selon RMSE et le sauvegarder avec joblib.
-    """
-    best_model_name = None
-    best_rmse = float('inf')
-    
+    # ===========================
+    # TRAIN LOOP
+    # ===========================
     for name, model in models.items():
-        y_pred = model.predict(X_test)
-        rmse = np.sqrt(mean_squared_error(y_test, y_pred))
-        if rmse < best_rmse:
-            best_rmse = rmse
-            best_model_name = name
-    
-    joblib.dump(models[best_model_name], path)
-    print(f"Meilleur modèle sauvegardé : {best_model_name} avec RMSE = {best_rmse:.2f}")
-    return best_model_name
+        log(f"🚀 Entraînement : {name}")
 
+        if name == "gradient_boosting":
+            grid = GridSearchCV(
+                model,
+                gbr_grid,
+                scoring="neg_mean_absolute_error",
+                cv=3,
+                n_jobs=-1
+            )
+            grid.fit(X_train, y_train)
+            model = grid.best_estimator_
+            params = grid.best_params_
+        else:
+            model.fit(X_train, y_train)
+            params = model.get_params()
+
+        y_pred = model.predict(X_test)
+        metrics = evaluate(y_test, y_pred)
+
+        row = {"model": name, **metrics}
+        results.append(row)
+        all_params[name] = params
+
+        # Sauvegarde du modèle individuel
+        joblib.dump(
+            {
+                "model": model,
+                "features": features,
+                "num_cols": num_cols,
+                "cat_cols": cat_cols
+            },
+            MODELS_DIR / f"{name}.joblib"
+        )
+
+        if metrics["mae"] < best_score:
+            best_score = metrics["mae"]
+            best_model = model
+            best_name = name
+            best_result = row
+
+    # ===========================
+    # SAVE FILES
+    # ===========================
+    log("💾 Sauvegarde des résultats")
+
+    metrics_df = pd.DataFrame(results).sort_values("mae")
+    metrics_df.to_csv(MODELS_DIR / "metrics.csv", index=False)
+
+    joblib.dump(
+        {
+            "model": best_model,
+            "features": features,
+            "num_cols": num_cols,
+            "cat_cols": cat_cols,
+            "name": best_name
+        },
+        MODELS_DIR / "best_model.joblib"
+    )
+
+    with open(MODELS_DIR / "all_models_params.json", "w") as f:
+        json.dump(all_params, f, indent=2)
+
+    with open(MODELS_DIR / "best_model_result.json", "w") as f:
+        json.dump(best_result, f, indent=2)
+
+    log("🏁 RÉSUMÉ FINAL")
+    print(metrics_df.to_string(index=False))
+    print(f"\n🏆 Meilleur modèle : {best_name}")
+    print(best_result)
+
+# ===========================
+# ENTRY POINT
+# ===========================
+if __name__ == "__main__":
+    main()

@@ -1,2 +1,0 @@
-alpha,copy_X,fit_intercept,max_iter,positive,precompute,random_state,selection,tol,warm_start
-0.1,True,True,1000,False,False,,cyclic,0.0001,False

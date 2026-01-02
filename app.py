@@ -1,153 +1,105 @@
-{
- "cells": [
-  {
-   "cell_type": "code",
-   "execution_count": 1,
-   "id": "dea981ed",
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stderr",
-     "output_type": "stream",
-     "text": [
-      "2026-01-02 11:33:21.355 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.607 \n",
-      "  \u001b[33m\u001b[1mWarning:\u001b[0m to view this Streamlit app on a browser, run it with the following\n",
-      "  command:\n",
-      "\n",
-      "    streamlit run C:\\Users\\lynou\\AppData\\Roaming\\Python\\Python312\\site-packages\\ipykernel_launcher.py [ARGUMENTS]\n",
-      "2026-01-02 11:33:25.614 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.618 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.621 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.625 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.636 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.639 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.643 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.648 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.653 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.663 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.665 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.686 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.695 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.700 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.702 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.704 Session state does not function when running a script without `streamlit run`\n",
-      "2026-01-02 11:33:25.717 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.722 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.736 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.742 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.750 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.755 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.767 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.771 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.773 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.776 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.783 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.788 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.790 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.792 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.801 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.803 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.808 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.822 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.825 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.836 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.839 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.851 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.855 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.862 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.888 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.904 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.907 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.922 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.953 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.967 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:25.975 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:26.009 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:26.019 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:26.020 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:26.023 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:26.029 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n",
-      "2026-01-02 11:33:26.033 Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.\n"
-     ]
-    }
-   ],
-   "source": [
-    "import streamlit as st\n",
-    "import pandas as pd\n",
-    "import joblib\n",
-    "\n",
-    "# -----------------------------\n",
-    "# 1️⃣ Charger le dataset et le modèle\n",
-    "# -----------------------------\n",
-    "chemin_fichier = r\"C:\\Users\\lynou\\OneDrive\\Documents\\Master 2\\web_scraping\\Projet\\data\\autoscrap_FIN_clean.csv\"\n",
-    "df = pd.read_csv(chemin_fichier, sep=';')\n",
-    "df.columns = df.columns.str.strip().str.replace('é','e').str.replace(' ','_')\n",
-    "df['age_voiture'] = 2026 - df['annee']\n",
-    "\n",
-    "# Charger le meilleur modèle sauvegardé\n",
-    "best_model_path = \"saved_models/RandomForest.pkl\"  # Remplacer par le meilleur modèle trouvé\n",
-    "model = joblib.load(best_model_path)\n",
-    "\n",
-    "# -----------------------------\n",
-    "# 2️⃣ Interface utilisateur\n",
-    "# -----------------------------\n",
-    "st.title(\"Prédiction du prix des voitures\")\n",
-    "\n",
-    "# Affichage du dataset\n",
-    "if st.checkbox(\"Afficher les données\"):\n",
-    "    st.dataframe(df.head(50))\n",
-    "\n",
-    "# Entrée utilisateur pour prédiction\n",
-    "st.header(\"Prédire le prix d'une voiture\")\n",
-    "annee = st.number_input(\"Année du véhicule\", min_value=2000, max_value=2026, value=2022)\n",
-    "kilometrage = st.number_input(\"Kilométrage (km)\", min_value=0, max_value=300000, value=20000)\n",
-    "puissance_cv = st.number_input(\"Puissance (CV)\", min_value=1, max_value=50, value=5)\n",
-    "carburant = st.selectbox(\"Type de carburant\", ['Essence', 'Diesel', 'Hybride', 'Electrique', 'Gpl'])\n",
-    "boite_vitesse = st.selectbox(\"Boîte de vitesse\", ['Manuelle', 'Automatique'])\n",
-    "\n",
-    "age_voiture = 2026 - annee\n",
-    "\n",
-    "input_df = pd.DataFrame([{\n",
-    "    'age_voiture': age_voiture,\n",
-    "    'kilometrage': kilometrage,\n",
-    "    'puissance_cv': puissance_cv,\n",
-    "    'carburant': carburant,\n",
-    "    'boite_vitesse': boite_vitesse\n",
-    "}])\n",
-    "\n",
-    "# Prédiction\n",
-    "if st.button(\"Prédire le prix\"):\n",
-    "    prix_pred = model.predict(input_df)[0]\n",
-    "    st.success(f\"Prix estimé : {prix_pred:,.0f} €\")\n",
-    "\n",
-    "    prix_entre = st.number_input(\"Prix réel proposé (€)\", min_value=0, value=int(prix_pred))\n",
-    "    if prix_entre < prix_pred:\n",
-    "        st.info(f\"Cela pourrait être une bonne affaire ! Économie potentielle : {prix_pred - prix_entre:,.0f} €\")\n",
-    "    else:\n",
-    "        st.warning(\"Le prix proposé est au-dessus ou égal à l'estimation du modèle.\")\n"
-   ]
-  }
- ],
- "metadata": {
-  "kernelspec": {
-   "display_name": "Python 3",
-   "language": "python",
-   "name": "python3"
-  },
-  "language_info": {
-   "codemirror_mode": {
-    "name": "ipython",
-    "version": 3
-   },
-   "file_extension": ".py",
-   "mimetype": "text/x-python",
-   "name": "python",
-   "nbconvert_exporter": "python",
-   "pygments_lexer": "ipython3",
-   "version": "3.12.5"
-  }
- },
- "nbformat": 4,
- "nbformat_minor": 5
+import streamlit as st
+import pandas as pd
+import joblib
+import plotly.express as px
+
+# ---------------------------
+# Chargement des ressources
+# ---------------------------
+
+@st.cache_data
+def load_data(path="data/autoscrap_FIN_clean.csv"):
+    return pd.read_csv(path, sep=";")
+
+@st.cache_resource
+def load_model(path="models/best_model.joblib"):
+    bundle = joblib.load(path)
+    return (
+        bundle["model"],
+        bundle["features"],
+        bundle["num_cols"],
+        bundle["cat_cols"]
+    )
+
+def prepare_input(df_train, user_input, features, cat_cols):
+    input_df = pd.DataFrame([user_input])
+
+    combined = pd.concat([df_train, input_df], axis=0)
+
+    encoded = pd.get_dummies(
+        combined,
+        columns=cat_cols,
+        drop_first=True
+    )
+
+    # Ajouter les colonnes manquantes
+    for col in features:
+        if col not in encoded.columns:
+            encoded[col] = 0
+
+    # Conserver uniquement les colonnes du modèle
+    encoded = encoded[features]
+
+    return encoded.tail(1)
+
+# ---------------------------
+# UI
+# ---------------------------
+
+st.title("🚗 Prédiction du prix d'une voiture d'occasion")
+st.write("Entrez les caractéristiques pour estimer le prix.")
+
+df = load_data()
+model, features, num_cols, cat_cols = load_model()
+
+st.sidebar.header("Caractéristiques")
+
+kilometrage = st.sidebar.number_input("Kilométrage (km)", 0, 300_000, 50_000, 1_000)
+puissance_cv = st.sidebar.number_input("Puissance (CV)", 20, 500, 100)
+age_voiture = st.sidebar.number_input("Âge (années)", 0, 50, 5)
+
+carburant = st.sidebar.selectbox("Carburant", sorted(df["carburant"].unique()))
+boite = st.sidebar.selectbox("Boîte de vitesse", sorted(df["boite_vitesse"].unique()))
+marque = st.sidebar.selectbox("Marque", sorted(df["marque"].unique()))
+modele = st.sidebar.selectbox("Modèle", sorted(df["modele"].unique()))
+
+user_input = {
+    "kilometrage": kilometrage,
+    "puissance_cv": puissance_cv,
+    "age_voiture": age_voiture,
+    "carburant": carburant,
+    "boite_vitesse": boite,
+    "marque": marque,
+    "modele": modele
 }
+
+if st.button("💰 Prédire le prix"):
+    X = prepare_input(
+        df_train=df[num_cols + cat_cols],
+        user_input=user_input,
+        features=features,
+        cat_cols=cat_cols
+    )
+    prix = model.predict(X)[0]
+    st.success(f"Prix estimé : **{prix:,.0f} €**")
+
+# ---------------------------
+# Visualisations
+# ---------------------------
+
+st.subheader("📊 Aperçu des données")
+st.dataframe(df.sample(10))
+
+fig1 = px.box(df, x="carburant", y="prix", title="Prix par carburant")
+st.plotly_chart(fig1, width="stretch")
+
+
+fig2 = px.scatter(
+    df,
+    x="age_voiture",
+    y="prix",
+    color="puissance_cv",
+    title="Prix vs âge"
+)
+st.plotly_chart(fig2, width="stretch")
+

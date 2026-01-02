@@ -140,10 +140,34 @@ def correlation_heatmap(df: pd.DataFrame):
 # ---------------------------
 # Exemple d'utilisation
 # ---------------------------
+# ---------------------------
+# Exemple d'utilisation
+# ---------------------------
 if __name__ == "__main__":
+    # 1️⃣ Charger les données
     df = load_data("data/autoscrap_FIN.json")
-    df = process_nom_annonce(df)  # traitement nom_annonce
+
+    # 2️⃣ Créer les colonnes 'marque' et 'modele'
+    df = process_nom_annonce(df)
+
+    # 3️⃣ Ajouter les features comme l'âge de la voiture
     df = add_features(df)
+
+    # 4️⃣ Nettoyer les données (outliers, types)
     df_clean = clean_data(df)
+
+    # 5️⃣ Réorganiser les colonnes selon l'ordre souhaité
+    desired_order = [
+        'marque', 'modele', 'annee', 'age_voiture', 'carburant', 'boite_vitesse',
+        'kilometrage', 'puissance_cv', 'prix', 'code_postal', 'url_annonce'
+    ]
+    # Ne garder que les colonnes existantes
+    df_clean = df_clean[[col for col in desired_order if col in df_clean.columns]]
+
+    # 6️⃣ Sauvegarder le CSV final
     save_csv(df_clean, "data/autoscrap_FIN_clean.csv")
+
+    # 7️⃣ Vérification
     print(df_clean.head())
+    print(df_clean.columns)  # Vérifier que l'ordre est correct
+    print(df.info())
